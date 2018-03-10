@@ -6,6 +6,8 @@ $numWords = 0;
 // function to display the page with each state of the game.
 function displayPage($image, $guessWord, $nowWord, $guessed, $wrong)
 {
+    $script = $_SERVER["PHP_SHELF"];
+
     echo <<<ENDPAGE
     
     <!DOCTYPE html>
@@ -64,7 +66,6 @@ function beginGame()
 
     $len = strlen($word);
     $guessWord = str_repeat('_ ', $len);
-    $script = $_SERVER["PHP_SHELF"];
 
     displayPage('h1.png', $guessWord, $nowWord, "", 0);
 }
@@ -112,7 +113,8 @@ function checkLetters($word, $guessed)
     for ($i = 0; $i < $len; $i++)
     {
         $x = $word[$i];
-        if (strstr($guessed, strtoupper($x), true))
+
+        if (strstr($guessed, $x))
         {
             $position = 2 * $i;
             $guessWord[$position] = $x;
@@ -157,6 +159,11 @@ function handleGuess()
         youWin($word);
     }
 
+    else if($wrong == 0)
+    {
+        displayPage('h1.png', $guessWord, $nowWord, $lettersguessed, $wrong);
+    }
+
     else if($wrong >= 7)
     {
         endGame($word);
@@ -191,6 +198,7 @@ function handleGuess()
     {
         displayPage('h7.png', $guessWord, $nowWord, $lettersguessed, $wrong);
     }
+
 }
 
 // load the file and begin the game.
@@ -207,4 +215,3 @@ else
 }
 
 ?>
-
